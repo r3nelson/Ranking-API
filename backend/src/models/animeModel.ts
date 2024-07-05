@@ -5,7 +5,7 @@ const animeSchema: Schema = new Schema({
   title: { type: String, required: true },
   status: {
     type: String,
-    enum: ["watching", "completed", "on_hold", "dropped", "plan_to_watch"],
+    enum: ["Watching", "Completed", "On Hold", "Dropped", "Plan to Watch"],
     required: true,
   },
   rating: { type: Number },
