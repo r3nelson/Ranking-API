@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import animeRoutes from "./routes/animes";
+import uploadRoutes from "./routes/upload";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -27,6 +28,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Routes
 app.use("/api/animes/", animeRoutes);
+app.use("/api", uploadRoutes);
 
 // Connect to MongoDB
 mongoose
