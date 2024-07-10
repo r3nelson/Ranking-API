@@ -1,7 +1,12 @@
 <template>
   <div class="anime-list">
     <h1>Name's Anime List</h1>
-    <button @click="toggleForm">{{ isFormHidden ? "+" : "-" }}</button>
+    <button
+      @click="toggleForm"
+      :class="[isFormHidden ? 'add-button' : 'cancel-button']"
+    >
+      {{ isFormHidden ? "Add Anime" : "Cancel" }}
+    </button>
     <form @submit.prevent="createAnime" v-if="!isFormHidden">
       <input v-model="formData.title" placeholder="title" required />
       <input v-model="formData.rating" type="number" />
@@ -12,6 +17,7 @@
         <option value="Dropped">Dropped</option>
         <option value="Plan to Watch">Plan to Watch</option>
       </select>
+
       <!-- Create Anime -->
       <button type="submit">Create</button>
     </form>
@@ -67,12 +73,14 @@
           />
           <div class="menu-options" v-if="anime.isShowMenu">
             <button
+              class="edit-button"
               v-if="!anime.isEditing"
               @click="anime.isEditing = !anime.isEditing"
             >
               Edit
             </button>
             <button
+              class="save-button"
               v-if="anime.isEditing"
               @click="
                 updateAnime(anime._id, anime.title, anime.status, anime.rating)
@@ -81,12 +89,14 @@
               Save
             </button>
             <button
+              class="cancel-button"
               v-if="anime.isEditing"
               @click="anime.isEditing = !anime.isEditing"
             >
               Cancel
             </button>
             <button
+              class="delete-button"
               v-if="!anime.isEditing"
               @click="deleteAnime(anime._id, anime.title)"
             >
@@ -294,5 +304,21 @@ li {
 .anime-item span,
 .anime-item select {
   padding: 10px;
+}
+
+.add-button {
+  background-color: green;
+}
+.edit-button {
+  background-color: yellow;
+}
+.delete-button {
+  background-color: red;
+}
+.save-button {
+  background-color: green;
+}
+.cancel-button {
+  background-color: lightcoral;
 }
 </style>

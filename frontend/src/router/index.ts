@@ -16,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AnimeView.vue"),
   },
+  {
+    path: "/upload",
+    name: "upload",
+    component: () => import("../views/uploadView.vue"),
+  },
 ];
 
 const router = createRouter({
