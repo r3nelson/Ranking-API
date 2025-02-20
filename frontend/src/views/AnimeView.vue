@@ -125,6 +125,8 @@ export default defineComponent({
   name: "AnimeList",
   data() {
     return {
+      // for docker use service name not container name in url
+      backendURL: "http://backend:12344/api/animes",
       animes: [] as Anime[],
       isFormHidden: true,
       formData: {
@@ -143,7 +145,8 @@ export default defineComponent({
     },
     async fetchAnimeData() {
       try {
-        const response = await fetch("http://localhost:4000/api/animes");
+        // "http://localhost:4000/api/animes" old url for local dev
+        const response = await fetch(this.backendURL);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -160,6 +163,7 @@ export default defineComponent({
         }));
       } catch (error) {
         console.error(`Error fetching anime data: ${error}`);
+        console.log(this.backendURL);
       }
     },
     async updateAnime(
@@ -169,20 +173,17 @@ export default defineComponent({
       rating?: number
     ) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/api/animes/${_id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title: title,
-              rating: rating,
-              status: status,
-            }),
-          }
-        );
+        const response = await fetch(`${this.backendURL}${_id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: title,
+            rating: rating,
+            status: status,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -203,7 +204,7 @@ export default defineComponent({
     },
     async createAnime() {
       try {
-        const response = await fetch(`http://localhost:4000/api/animes/`, {
+        const response = await fetch(`${this.backendURL}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -243,12 +244,9 @@ export default defineComponent({
           alert(`${title} was not deleted`);
           return;
         }
-        const response = await fetch(
-          `http://localhost:4000/api/animes/${_id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`${this.backendURL}${_id}`, {
+          method: "DELETE",
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: anime-backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - "12344:4000"
+    environment:
+      MONGO_URL: mongodb://anime-db:27017/Anime_API
+    depends_on:
+      - db
+    networks:
+      - anime-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: anime-frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "12345:8080"
+    depends_on:
+      - backend
+    networks:
+      - anime-network
+
+  db:
+    image: mongo:latest
+    container_name: anime-db
+    ports:
+      - "12346:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - anime-network
+
+volumes:
+  mongo-data:
+networks:
+  anime-network:
+    driver: bridge
